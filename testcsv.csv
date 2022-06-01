@@ -1,0 +1,11 @@
+id,value,datetime,site_id,unit_id,metric_id,sensor_id,stderr,offset_type_id,offset_value,instrument_name
+68945,3.5,2015-02-21 16:28:19-05,stroubles1,1,3,,,3,0,sonde
+69034,3.52,2015-02-21 16:31:19-05,stroubles1,1,3,,,3,0,sonde
+69124,3.54,2015-02-21 16:34:19-05,stroubles1,1,3,,,3,0,sonde
+69215,3.54,2015-02-21 16:37:19-05,stroubles1,1,3,,,3,0,sonde
+69305,3.54,2015-02-21 16:40:19-05,stroubles1,1,3,,,3,0,sonde
+69395,3.56,2015-02-21 16:43:19-05,stroubles1,1,3,,,3,0,sonde
+69486,3.58,2015-02-21 16:46:19-05,stroubles1,1,3,,,3,0,sonde
+69577,3.62,2015-02-21 16:49:19-05,stroubles1,1,3,,,3,0,sonde
+69666,3.69,2015-02-21 16:52:19-05,stroubles1,1,3,,,3,0,sonde
+69756,3.76,2015-02-21 16:55:19-05,stroubles1,1,3,,,3,0,sonde
