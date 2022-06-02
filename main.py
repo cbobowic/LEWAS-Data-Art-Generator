@@ -26,15 +26,22 @@ def basicArt():
 if __name__ == "__main__":
     # error checking
     if len(sys.argv) > 2:
-        raise ArgumentError("Error: Too Many Arguments")
+        print("Error: Too Many Arguments")
+        quit()
     elif len(sys.argv) < 2:
-        raise ArgumentError("Error: Input File Required")
+        print("Error: Input File Required")
+        quit()
     elif not sys.argv[1].endswith('.csv'):
-        raise ArgumentTypeError("Error: Argument filename must be of file type *.csv")
+        print("Error: Argument filename must be of file type *.csv")
+        quit()
     else:
         filepath = sys.argv[1]
         # csv parser
-        data = pd.read_csv(filepath_or_buffer=filepath, index_col='id', usecols=['id','value','datetime'])
-        data['datetime'] = pd.to_datetime(data.datetime)
-        basicArt()
-        # Temperature_Circle(data,canvas_width,canvas_height)
+        try:
+            data = pd.read_csv(filepath_or_buffer=filepath, index_col='id', usecols=['id','value','datetime'])
+        except FileNotFoundError:
+            print("Error: File Not Found!")
+        else:
+            data['datetime'] = pd.to_datetime(data.datetime)
+            basicArt()
+            # Temperature_Circle(data,canvas_width,canvas_height)
