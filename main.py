@@ -24,25 +24,27 @@ def basicArt():
 
 
 if __name__ == "__main__":
+    starttime = time.time()
     # error checking
     if len(sys.argv) > 2:
         print("Error: Too Many Arguments")
-        quit()
     elif len(sys.argv) < 2:
         print("Error: Input File Required")
-        quit()
     elif not sys.argv[1].endswith('.csv'):
         print("Error: Argument filename must be of file type *.csv")
-        quit()
     else:
         filepath = sys.argv[1]
         # csv parser
+        csvparse = time.time()
         try:
-            data = pd.read_csv(filepath_or_buffer=filepath, usecols=['id','value','datetime'])
+            data = pd.read_csv(filepath_or_buffer=filepath, 
+                               usecols=['id','value','datetime'], 
+                               parse_dates=['datetime'])
         except FileNotFoundError:
             print("Error: File Not Found!")
         else:
-            # Mapping the dates to_datetime takes 30 seconds. Is there any way to do this better?
-            data['datetime'] = pd.to_datetime(data.datetime)
             # basicArt()
-            Temperature_Circle(data,canvas_width,canvas_height, 'red', 'green')
+            print("CSV Parse Time: ", time.time()-csvparse)
+            Temperature_Circle(data,canvas_width,canvas_height, (0,0,255), (255,0,0))
+            print("Total Time: ", time.time() - starttime)
+
