@@ -38,10 +38,10 @@ if __name__ == "__main__":
         filepath = sys.argv[1]
         # csv parser
         try:
-            data = pd.read_csv(filepath_or_buffer=filepath, index_col='id', usecols=['id','value','datetime'])
+            data = pd.read_csv(filepath_or_buffer=filepath, usecols=['id','value','datetime'])
         except FileNotFoundError:
             print("Error: File Not Found!")
         else:
             data['datetime'] = pd.to_datetime(data.datetime)
-            basicArt()
-            # Temperature_Circle(data,canvas_width,canvas_height)
+            # basicArt()
+            Temperature_Circle(data,canvas_width,canvas_height)
