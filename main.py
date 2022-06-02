@@ -15,8 +15,8 @@ canvas_height = 1000
 def basicArt():
     '''This is a basic example of using data to create a visual.'''
     img = Image.new(mode='RGB', size=(canvas_width,canvas_height), color='black')
+    draw = ImageDraw.Draw(img)
     for i in data['value']:
-        draw = ImageDraw.Draw(img)
         xy = (100, 100, 800, 200 * i)
         draw.line(xy, fill='green', width=1)
 
@@ -24,6 +24,7 @@ def basicArt():
 
 
 if __name__ == "__main__":
+    # error checking
     if len(sys.argv) > 2:
         raise ArgumentError("Error: Too Many Arguments")
     elif len(sys.argv) < 2:
@@ -34,11 +35,6 @@ if __name__ == "__main__":
         filepath = sys.argv[1]
         # csv parser
         data = pd.read_csv(filepath_or_buffer=filepath, index_col='id', usecols=['id','value','datetime'])
-        # basicArt()
         data['datetime'] = pd.to_datetime(data.datetime)
-        
-        # print(data.datetime.dt.month)
-        # print('working')
-
-
-        Temperature_Circle(data,canvas_width,canvas_height)
+        basicArt()
+        # Temperature_Circle(data,canvas_width,canvas_height)
