@@ -1,6 +1,6 @@
 from argparse import ArgumentError, ArgumentTypeError
 import sys
-from time import time
+import time
 import numpy as np
 import pandas as pd
 from PIL import Image, ImageDraw
@@ -9,8 +9,8 @@ import datetime as dt
 from temperature_circle import Temperature_Circle
 
 # Set the initial canvas dimensions
-canvas_width = 1200
-canvas_height = 1000
+canvas_width = 2000
+canvas_height = 1500
 
 def basicArt():
     '''This is a basic example of using data to create a visual.'''
@@ -42,6 +42,7 @@ if __name__ == "__main__":
         except FileNotFoundError:
             print("Error: File Not Found!")
         else:
+            # Mapping the dates to_datetime takes 30 seconds. Is there any way to do this better?
             data['datetime'] = pd.to_datetime(data.datetime)
             # basicArt()
-            Temperature_Circle(data,canvas_width,canvas_height)
+            Temperature_Circle(data,canvas_width,canvas_height, 'red', 'green')
