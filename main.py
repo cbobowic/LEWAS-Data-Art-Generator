@@ -1,6 +1,7 @@
 import sys
 import time
 import pandas as pd
+import random as rnd
 from PIL import Image, ImageDraw
 
 from temperature_circle import Temperature_Circle
@@ -19,6 +20,23 @@ def basicArt():
 
     img.show()
 
+def drawPoints():
+    img = Image.new(mode='RGB', size=(canvas_width, canvas_height), color='black')
+    draw = ImageDraw.Draw(img)
+    w, h = img.size
+    # DISTANCE AMONG POINTS
+    step = 10
+    for n in range(step, w, step):
+        for x in range(step, h - step, step):
+            ran = rnd.uniform(0.0, 40.0)
+            a = n + ran
+            b = x + ran
+            if a > canvas_width:
+                a = n
+            if b > canvas_height:
+                b = x
+            draw.point((a, b), fill="yellow")
+    img.show()
 
 if __name__ == "__main__":
     starttime = time.time()
@@ -41,6 +59,7 @@ if __name__ == "__main__":
         else:
             print('CSVPARSE: ', time.time() - starttime)
             # basicArt()
-            Temperature_Circle(data,canvas_width,canvas_height, (0,0,255), (255,0,0))
-            print("Total Time: ", time.time() - starttime)
+            drawPoints()
+            #Temperature_Circle(data,canvas_width,canvas_height, (0,0,255), (255,0,0))
+            #print("Total Time: ", time.time() - starttime)
 
