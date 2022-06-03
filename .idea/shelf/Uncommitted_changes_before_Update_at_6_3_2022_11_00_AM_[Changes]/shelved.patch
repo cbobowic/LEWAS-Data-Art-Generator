@@ -1,0 +1,18 @@
+Index: main.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>from argparse import ArgumentError, ArgumentTypeError\r\nimport sys\r\nimport time\r\nimport numpy as np\r\nimport pandas as pd\r\nimport random as rnd\r\nfrom PIL import Image, ImageDraw\r\nimport datetime as dt\r\n\r\nfrom temperature_circle import Temperature_Circle\r\n\r\n# Set the initial canvas dimensions\r\ncanvas_width = 2000\r\ncanvas_height = 1500\r\n\r\ndef basicArt():\r\n    '''This is a basic example of using data to create a visual.'''\r\n    img = Image.new(mode='RGB', size=(canvas_width,canvas_height), color='black')\r\n    draw = ImageDraw.Draw(img)\r\n    for i in data['value']:\r\n        xy = (100, 100, 800, 200 * i)\r\n        draw.line(xy, fill='green', width=1)\r\n\r\n    img.show()\r\n\r\ndef drawPoints():\r\n    img = Image.new(mode='RGB', size=(canvas_width, canvas_height), color='black')\r\n    draw = ImageDraw.Draw(img)\r\n\r\n\r\n    w, h = img.size\r\n    # distance between points\r\n    step = 10\r\n\r\n    # creating randomized points within an image\r\n    # each point is a pixel so maybe this is not ideal cuz too small\r\n    for n in range(step, w, step):\r\n        for x in range(step, h - step, step):\r\n            float = rnd.uniform(0.0, 25.0)\r\n            a = n + float\r\n            b = x + float\r\n            if a > canvas_width:\r\n                a = n\r\n            if b > canvas_height:\r\n                b = x\r\n            draw.point((a, b), fill=\"yellow\")\r\n\r\n    img.show()\r\n\r\nif __name__ == \"__main__\":\r\n    # error checking\r\n    if len(sys.argv) > 2:\r\n        print(\"Error: Too Many Arguments\")\r\n        quit()\r\n    elif len(sys.argv) < 2:\r\n        print(\"Error: Input File Required\")\r\n        quit()\r\n    elif not sys.argv[1].endswith('.csv'):\r\n        print(\"Error: Argument filename must be of file type *.csv\")\r\n        quit()\r\n    else:\r\n        filepath = sys.argv[1]\r\n        # csv parser\r\n        try:\r\n            data = pd.read_csv(filepath_or_buffer=filepath, usecols=['id','value','datetime'])\r\n        except FileNotFoundError:\r\n            print(\"Error: File Not Found!\")\r\n        else:\r\n            # Mapping the dates to_datetime takes 30 seconds. Is there any way to do this better?\r\n            #data['datetime'] = pd.to_datetime(data.datetime)\r\n            #basicArt()\r\n            drawPoints()\r\n            #Temperature_Circle(data,canvas_width,canvas_height, 'red', 'green')\r\n
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/main.py b/main.py
+--- a/main.py	(revision 0e1e4b35ddc50dcdaab9f542bb65e0bf4c445fd5)
++++ b/main.py	(date 1654268404460)
+@@ -44,7 +44,6 @@
+             if b > canvas_height:
+                 b = x
+             draw.point((a, b), fill="yellow")
+-
+     img.show()
+ 
+ if __name__ == "__main__":
