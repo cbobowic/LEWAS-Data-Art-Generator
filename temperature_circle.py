@@ -27,7 +27,7 @@ class Temperature_Circle:
         self.plotpoint()
         endplot = time.time()
         print('PLOTPOINT: ', endplot - beginplot)
-        self.img.show()
+        # self.img.show()
 
 
     def setup(self):
@@ -47,14 +47,18 @@ class Temperature_Circle:
     def plotpoint(self):
         '''This method iteratively loops through the DataFrame and plots each 
         point on the image.'''
-        for i, row in self.data.iterrows():
-            ts = pd.to_datetime(row.datetime)
-            xy = (self.calculate_point_vals(ts, row.value)[0], 
-                  self.calculate_point_vals(ts, row.value)[1])
-            rgb = (self.calculate_point_vals(ts, row.value)[2], 
-                   self.calculate_point_vals(ts, row.value)[3], 
-                   self.calculate_point_vals(ts, row.value)[4])
-            ImageDraw.Draw(self.img).point(xy, fill=rgb)
+        # for i, row in self.data.iterrows():
+        #     ts = pd.to_datetime(row.datetime)
+        #     xy = (self.calculate_point_vals(ts, row.value)[0], 
+        #           self.calculate_point_vals(ts, row.value)[1])
+        #     rgb = (self.calculate_point_vals(ts, row.value)[2], 
+        #            self.calculate_point_vals(ts, row.value)[3], 
+        #            self.calculate_point_vals(ts, row.value)[4])
+        #     ImageDraw.Draw(self.img).point(xy, fill=rgb)
+
+        
+
+
         '''
         # Test circle to see where points are plotted
         circle_xy = (self.calculate_point_vals(pd.Timestamp('2017-01-01'), 3.66))
@@ -83,6 +87,9 @@ class Temperature_Circle:
         circle_xy = (self.calculate_point_vals(pd.Timestamp('2017-12-01'), 3.66))
         ImageDraw.Draw(self.img).ellipse((circle_xy[0],circle_xy[1],circle_xy[0]+5,circle_xy[1]+5), fill='white')
         '''
+
+    def plot_point_apply():
+
 
     def calculate_point_vals(self, row_date: pd.Timestamp, row_val: float) -> tuple:
         '''This method calculates the position and color values of a data point given
