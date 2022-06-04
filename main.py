@@ -59,7 +59,7 @@ if __name__ == "__main__":
         else:
             print('CSVPARSE: ', time.time() - starttime)
             # basicArt()
-            drawPoints()
-            #Temperature_Circle(data,canvas_width,canvas_height, (0,0,255), (255,0,0))
-            #print("Total Time: ", time.time() - starttime)
+            # drawPoints()
+            Temperature_Circle(data,canvas_width,canvas_height, (0,0,255), (255,0,0))
+            print("Total Time: ", time.time() - starttime)
 
