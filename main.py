@@ -4,7 +4,7 @@ import pandas as pd
 import random as rnd
 from PIL import Image, ImageDraw
 
-from temperature_circle import Temperature_Circle
+from TemperatureCircle import TemperatureCircle
 
 # Set the initial canvas dimensions
 canvas_width = 2000
@@ -40,7 +40,7 @@ def drawPoints():
 
 if __name__ == "__main__":
     starttime = time.time()
-    
+
     # error checking
     if len(sys.argv) > 2:
         print("Error: Too Many Arguments")
@@ -52,7 +52,7 @@ if __name__ == "__main__":
         filepath = sys.argv[1]
         # basicArt()
         # drawPoints()
-        Temperature_Circle(filepath,canvas_width,canvas_height, (0,0,255), (255,0,0))
+        TemperatureCircle(filepath,canvas_width,canvas_height, (0,0,255), (255,0,0))
 
         print("Total Time: ", time.time() - starttime)
 

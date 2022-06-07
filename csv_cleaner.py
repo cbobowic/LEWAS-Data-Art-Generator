@@ -7,7 +7,8 @@ def write_csv(filein: str, fileout: str):
     processing time when generating (and testing) different art classes.
     
     :param str filein : the relative path of the input file to be processed.
-    :param str fileout : the relative path and name of the output file.'''
+    :param str fileout : the relative path and name of the output file.
+    '''
     try:
         df = pd.read_csv(filein,usecols=['id','value','datetime'], index_col=['datetime'])
     except FileNotFoundError:

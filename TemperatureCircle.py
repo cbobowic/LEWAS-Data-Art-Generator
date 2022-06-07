@@ -3,13 +3,7 @@ from PIL import Image, ImageDraw
 import pandas as pd
 import math
 
-class Temperature_Circle:
-
-# TODO: List of Potential improvements:
-    # Cleaning? How does that work?
-    # Randomization -- is it necessary? To what degree
-    # Negative values -- are they intentional
-
+class TemperatureCircle:
 
     def __init__(self, filepath: str, canvas_width: int, canvas_height: int, cool_color: tuple, warm_color: tuple) -> None:
         self.filepath = filepath
@@ -46,6 +40,8 @@ class Temperature_Circle:
                                              self.width/2+init_radius,
                                              self.height*2/5+init_radius),
                                          fill='white')
+
+        self.data = self.data[(self.data['value'] < 25)] # Data cleaning
         # calculate minval and maxval of the DataFrame
         self.min_val = self.data.min()['value']
         self.max_val = self.data.max()['value']
