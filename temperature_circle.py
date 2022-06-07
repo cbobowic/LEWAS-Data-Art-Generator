@@ -11,8 +11,8 @@ class Temperature_Circle:
     # Negative values -- are they intentional
 
 
-    def __init__(self, data, canvas_width: int, canvas_height: int, cool_color: tuple, warm_color: tuple) -> None:
-        self.data = data[(data.value < 25)] # data cleaning
+    def __init__(self, filepath: str, canvas_width: int, canvas_height: int, cool_color: tuple, warm_color: tuple) -> None:
+        self.filepath = filepath
         self.width = canvas_width
         self.height = canvas_height
         self.cool_color = cool_color
@@ -25,12 +25,20 @@ class Temperature_Circle:
         endplot = time.time()
         print('PLOTPOINT: ', endplot - beginplot)
 
-        # self.img.show()
-        self.img.save("Water_Temp_Art.jpg")
+        self.img.show()
+        # Uncomment to save image
+        # self.img.save("Water_Temp_Art_uncleaned.jpg")
 
 
     def setup(self):
         '''Sets up the image and centerpoint and calculates the min and max value of the data'''
+
+        try:
+            self.data = pd.read_csv(filepath_or_buffer=self.filepath, 
+                               usecols=['value','datetime'])
+        except FileNotFoundError:
+            print("Error: File Not Found!")
+            quit()
         self.img = Image.new(mode='RGB', size=(self.width,self.height), color='black')
         init_radius = 5
         ImageDraw.Draw(self.img).ellipse(xy=(self.width/2-init_radius,
@@ -50,8 +58,13 @@ class Temperature_Circle:
         :param float value: the value of the given datapoint
         '''
         xyrgb_tuple = self.calculate_point_vals(datetime, value)
-        ImageDraw.Draw(self.img).point((xyrgb_tuple[0], xyrgb_tuple[1]), 
+        ImageDraw.Draw(self.img).point((xyrgb_tuple[0], xyrgb_tuple[1]), \
                                         fill=(xyrgb_tuple[2], xyrgb_tuple[3], xyrgb_tuple[4]))
+
+        # For more sparse data, use this to draw small circles instead of pixels
+        # ImageDraw.Draw(self.img).ellipse((xyrgb_tuple[0]-1, xyrgb_tuple[1]-1, \
+        #                                   xyrgb_tuple[0]+1, xyrgb_tuple[1]+1), \
+        #                                  fill=(xyrgb_tuple[2], xyrgb_tuple[3], xyrgb_tuple[4]))
 
 
     def calculate_point_vals(self, row_date: pd.Timestamp, row_val: float) -> tuple:

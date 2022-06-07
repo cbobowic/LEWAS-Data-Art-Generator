@@ -40,26 +40,19 @@ def drawPoints():
 
 if __name__ == "__main__":
     starttime = time.time()
+    
     # error checking
     if len(sys.argv) > 2:
         print("Error: Too Many Arguments")
     elif len(sys.argv) < 2:
-        print("Error: Input File Required")
+        print("Error: Input filepath is required")
     elif not sys.argv[1].endswith('.csv'):
         print("Error: Argument filename must be of file type *.csv")
     else:
         filepath = sys.argv[1]
-        # csv parser
-        csvparse = time.time()
-        try:
-            data = pd.read_csv(filepath_or_buffer=filepath, 
-                               usecols=['id','value','datetime'])
-        except FileNotFoundError:
-            print("Error: File Not Found!")
-        else:
-            print('CSVPARSE: ', time.time() - starttime)
-            # basicArt()
-            # drawPoints()
-            Temperature_Circle(data,canvas_width,canvas_height, (0,0,255), (255,0,0))
-            print("Total Time: ", time.time() - starttime)
+        # basicArt()
+        # drawPoints()
+        Temperature_Circle(filepath,canvas_width,canvas_height, (0,0,255), (255,0,0))
+
+        print("Total Time: ", time.time() - starttime)
 
