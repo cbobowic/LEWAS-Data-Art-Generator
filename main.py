@@ -3,6 +3,7 @@ import time
 import pandas as pd
 import random as rnd
 from PIL import Image, ImageDraw
+from DotGraph import DotGraph
 
 from TemperatureCircle import TemperatureCircle
 
@@ -52,7 +53,7 @@ if __name__ == "__main__":
         filepath = sys.argv[1]
         # basicArt()
         # drawPoints()
-        TemperatureCircle(filepath,canvas_width,canvas_height, (0,0,255), (255,0,0))
-
+        # TemperatureCircle(filepath,canvas_width,canvas_height, (0,0,255), (255,0,0))
+        DotGraph(filepath,canvas_width,canvas_height)
         print("Total Time: ", time.time() - starttime)
 
