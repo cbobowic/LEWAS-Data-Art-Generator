@@ -3,6 +3,27 @@ from PIL import Image, ImageDraw
 import pandas as pd
 import math
 
+
+class ColorCalculator:
+
+    def calculate_color(self, per: float, cool_color: tuple, warm_color: tuple) -> tuple:
+        '''This method takes any two RGB tuples and plots a radial gradient from the cool
+        color (inside) to warm color (outside).
+
+        :param float per: the percent the color is between the cool and warm color (0-1)
+        :param tuple cool_color: the (R,G,B) for the color for the inside of the circle
+        :param tuple warm_color: the (R,G,B) for the color for the outside of the circle
+        :return tuple: the (R,G,B) tuple of the output color
+        '''
+        inverse = 1 - per
+        r = int(cool_color[0] * inverse + warm_color[0] * per)
+        g = int(cool_color[1] * inverse + warm_color[1] * per)
+        b = int(cool_color[2] * inverse + warm_color[2] * per)
+        return (r,g,b)
+
+
+
+
 class TemperatureCircle:
 
     def __init__(self, filepath: str, canvas_width: int, canvas_height: int, cool_color: tuple, warm_color: tuple) -> None:
@@ -88,25 +109,7 @@ class TemperatureCircle:
         y = scaled_radius*math.sin(theta-math.pi/2)
 
         position = (origin[0] + x, origin[1] + y)
-        color = self.calculate_color(percentage, self.cool_color, self.warm_color)
-       
+        color = ColorCalculator.calculate_color(percentage, self.cool_color, self.warm_color)
+
         return position + color
-
-
-    def calculate_color(self, per: float, cool_color: tuple, warm_color: tuple) -> tuple:
-        '''This method takes any two RGB tuples and plots a radial gradient from the cool
-        color (inside) to warm color (outside).
-
-        :param float per: the percent the color is between the cool and warm color (0-1)
-        :param tuple cool_color: the (R,G,B) for the color for the inside of the circle
-        :param tuple warm_color: the (R,G,B) for the color for the outside of the circle
-        :return tuple: the (R,G,B) tuple of the output color
-        '''
-        inverse = 1 - per
-        r = int(cool_color[0] * inverse + warm_color[0] * per)
-        g = int(cool_color[1] * inverse + warm_color[1] * per)
-        b = int(cool_color[2] * inverse + warm_color[2] * per)
-        return (r,g,b)
-
-
 

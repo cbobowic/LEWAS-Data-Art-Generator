@@ -3,6 +3,7 @@ import time
 import pandas as pd
 import random as rnd
 from PIL import Image, ImageDraw
+from DataBars import DataBars
 from DotGraph import DotGraph
 
 from TemperatureCircle import TemperatureCircle
@@ -54,6 +55,7 @@ if __name__ == "__main__":
         # basicArt()
         # drawPoints()
         # TemperatureCircle(filepath,canvas_width,canvas_height, (0,0,255), (255,0,0))
-        DotGraph(filepath,canvas_width,canvas_height)
+        # DotGraph(filepath,canvas_width,canvas_height,step=10)
+        DataBars(filepath, canvas_width, canvas_height)
         print("Total Time: ", time.time() - starttime)
 
