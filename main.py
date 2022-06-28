@@ -153,7 +153,7 @@ def dataBars():
         quit()
 
 def dot_graph():
-    DotGraph(inputFile('file: '), canvas_width, canvas_height)
+    DotGraph(pd.read_csv('wt.csv', usecols=['value','datetime']), pd.read_csv('s.csv', usecols=['value','datetime']), canvas_width, canvas_height)
 
 
 if __name__ == "__main__":
