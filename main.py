@@ -2,6 +2,7 @@ import re
 import sys
 import time
 from tkinter import N
+from tracemalloc import start
 from turtle import st
 import pandas as pd
 import random as rnd
@@ -117,14 +118,21 @@ def saveLoop():
             print("ERROR: Please enter yes (y) or no (n)")
 
 def temperature_circle():
-    while True:
-        data = inputFile('\nPlease Enter CSV Filepath : ')
-        print('\nPlease Enter Cool Color')
-        coolColor = inputColor('Cool Color RGB Tuple : ')
-        print('\nPlease Enter Warm Color')
-        warmColor = inputColor('Warm Color RGB Tuple : ')
-        TemperatureCircle(data, canvas_width, canvas_height, coolColor, warmColor, saveLoop())
-        quit()
+    # while True:
+    #     data = inputFile('\nPlease Enter CSV Filepath : ')
+    #     print('\nPlease Enter Cool Color')
+    #     coolColor = inputColor('Cool Color RGB Tuple : ')
+    #     print('\nPlease Enter Warm Color')
+    #     warmColor = inputColor('Warm Color RGB Tuple : ')
+    #     start = time.time()
+    #     TemperatureCircle(data, canvas_width, canvas_height, coolColor, warmColor, saveLoop())
+    #     print("Total Time : " , round((time.time()-start),4) , ' seconds')
+    #     quit()
+    start = time.time()
+    TemperatureCircle(pd.read_csv('LEWAS_data\Cleaned_data\cleaned_temp.csv'), canvas_width, canvas_height, (0,0,255), (255,120,0), None)
+    print("Total Time : " , round((time.time()-start),4) , ' seconds')
+
+    
             
 def dataBars():
     while True:
@@ -153,9 +161,16 @@ def dataBars():
         quit()
 
 def dot_graph():
-    DotGraph(pd.read_csv('wt.csv', usecols=['value','datetime']), pd.read_csv('s.csv', usecols=['value','datetime']), canvas_width, canvas_height)
-    # DotGraph(pd.read_csv('LEWAS_data\Cleaned_data\cleaned_temp.csv', usecols=['value','datetime']), pd.read_csv('LEWAS_data\Cleaned_data\cleaned_salinity.csv', usecols=['value','datetime']), canvas_width, canvas_height)
+    while True:
+        data1 = inputFile('\nPlease Enter CSV Filepath 1 : ')
+        data2 = inputFile('\nPlease Enter CSV Filepath 2 : ')
+        print('\nPlease Enter Cool Color')
+        coolColor = inputColor('Cool Color RGB Tuple : ')
+        print('\nPlease Enter Warm Color')
+        warmColor = inputColor('Warm Color RGB Tuple : ')
 
+        DotGraph(data1, data2, canvas_width, canvas_height, coolColor, warmColor, saveLoop())
+        quit()
 
 if __name__ == "__main__":
     if ( len(sys.argv) < 2 ):

@@ -78,15 +78,17 @@ class TemperatureCircle:
         :param float value: the value of the given datapoint
         """
         xyrgb_tuple = self.calculate_point_vals(datetime, value)
-        ImageDraw.Draw(self.img).point(
-            (xyrgb_tuple[0], xyrgb_tuple[1]),
-            fill=(xyrgb_tuple[2], xyrgb_tuple[3], xyrgb_tuple[4]),
-        )
+
+        # For less sparse data, use this to draw singular pixels
+        # ImageDraw.Draw(self.img).point(
+        #     (xyrgb_tuple[0], xyrgb_tuple[1]),
+        #     fill=(xyrgb_tuple[2], xyrgb_tuple[3], xyrgb_tuple[4]),
+        # )
 
         # For more sparse data, use this to draw small circles instead of pixels
-        # ImageDraw.Draw(self.img).ellipse((xyrgb_tuple[0]-1, xyrgb_tuple[1]-1, \
-        #                                   xyrgb_tuple[0]+1, xyrgb_tuple[1]+1), \
-        #                                  fill=(xyrgb_tuple[2], xyrgb_tuple[3], xyrgb_tuple[4]))
+        ImageDraw.Draw(self.img).ellipse((xyrgb_tuple[0]-1, xyrgb_tuple[1]-1, \
+                                          xyrgb_tuple[0]+1, xyrgb_tuple[1]+1), \
+                                         fill=(xyrgb_tuple[2], xyrgb_tuple[3], xyrgb_tuple[4]))
 
     def calculate_point_vals(self, row_date: pd.Timestamp, row_val: float) -> tuple:
         """This method calculates the position and color values of a data point given
