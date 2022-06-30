@@ -1,25 +1,22 @@
 import re
 import sys
 import time
-from tkinter import N
-from tracemalloc import start
-from turtle import st
 import pandas as pd
 import random as rnd
 from PIL import Image, ImageDraw
-from DataBars import DataBars
-from DotGraph import DotGraph
 
+from DataBars import DataBars
+from LineGraph import LineGraph
 from TemperatureCircle import TemperatureCircle
 
 # Set the initial canvas dimensions
-canvas_width = 2000
-canvas_height = 1500
-rgb_regex = "^\((([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])),(([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])),(([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5]))\)$"
+CANVAS_WIDTH = 2000
+CANVAS_HEIGHT = 1500
+RGB_REGEX = "^\((([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])),(([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])),(([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5]))\)$"
 
 
 def drawPoints():
-    img = Image.new(mode='RGB', size=(canvas_width, canvas_height), color='black')
+    img = Image.new(mode='RGB', size=(CANVAS_WIDTH, CANVAS_HEIGHT), color='black')
     draw = ImageDraw.Draw(img)
     w, h = img.size
     # DISTANCE AMONG POINTS
@@ -29,47 +26,20 @@ def drawPoints():
             ran = rnd.uniform(0.0, 40.0)
             a = n + ran
             b = x + ran
-            if a > canvas_width:
+            if a > CANVAS_WIDTH:
                 a = n
-            if b > canvas_height:
+            if b > CANVAS_HEIGHT:
                 b = x
             draw.point((a, b), fill="yellow")
     img.show()
 
 
-# if __name__ == "__main__":
-#     starttime = time.time()
-
-#     # error checking
-#     if len(sys.argv) > 4:
-#         print("Error: Too Many Arguments")
-#     elif len(sys.argv) < 2:
-#         print("Error: Input filepath is required")
-#     elif not sys.argv[1].endswith('.csv'):
-#         print("Error: Argument filename must be of file type *.csv")
-#     else:
-#         filepath = sys.argv[1]
-#         filepath2 = None
-#         filepath3 = None
-#         if ( len(sys.argv) == 3 or len(sys.argv) == 4 ): 
-#             filepath2 = sys.argv[2]
-#         if ( len(sys.argv) == 4 ): filepath3 = sys.argv[3]
-#         # basicArt()
-#         # drawPoints()
-#         # TemperatureCircle(filepath,canvas_width,canvas_height, (0,0,255), (255,0,0))
-#         # DotGraph(filepath,canvas_width,canvas_height,step=10)
-
-#         DataBars(canvas_width, canvas_height, filepath, filepath2, filepath3)
-        
-#         print("Total Time: ", time.time() - starttime)
-
-
 def help():
-    print('ART GENERATOR USAGE:')
+    print('\nART GENERATOR USAGE:')
     print('--help               print this usage information')
     print('--TemperatureCircle  create a radial color circle')
-    print('--DotGraph           create an graph of points representing data values')
-    print('--DataBars           create 1, 2, or 3 bars representing data values')
+    print('--LineGraph          create an graph of lines representing changes in data values')
+    print('--DataBars           create 1, 2, or 3 bars representing data values\n')
 
 def inputColor(prompt: str) -> tuple:
     while True:
@@ -77,7 +47,7 @@ def inputColor(prompt: str) -> tuple:
         if colorIn == 'q':
             quit()
         colorIn = colorIn.replace(' ','')
-        if re.search(rgb_regex,colorIn):
+        if re.search(RGB_REGEX,colorIn):
             colorIn = colorIn[1:-1]
             rgbIn = colorIn.split(',')
             return (int(rgbIn[0]),int(rgbIn[1]),int(rgbIn[2]))
@@ -118,19 +88,21 @@ def saveLoop():
             print("ERROR: Please enter yes (y) or no (n)")
 
 def temperature_circle():
-    # while True:
-    #     data = inputFile('\nPlease Enter CSV Filepath : ')
-    #     print('\nPlease Enter Cool Color')
-    #     coolColor = inputColor('Cool Color RGB Tuple : ')
-    #     print('\nPlease Enter Warm Color')
-    #     warmColor = inputColor('Warm Color RGB Tuple : ')
-    #     start = time.time()
-    #     TemperatureCircle(data, canvas_width, canvas_height, coolColor, warmColor, saveLoop())
-    #     print("Total Time : " , round((time.time()-start),4) , ' seconds')
-    #     quit()
-    start = time.time()
-    TemperatureCircle(pd.read_csv('LEWAS_data\Cleaned_data\cleaned_temp.csv'), canvas_width, canvas_height, (0,0,255), (255,120,0), None)
-    print("Total Time : " , round((time.time()-start),4) , ' seconds')
+    while True:
+        data = inputFile('\nPlease Enter CSV Filepath : ')
+        print('\nPlease Enter Cool Color')
+        coolColor = inputColor('Cool Color RGB Tuple : ')
+        print('\nPlease Enter Warm Color')
+        warmColor = inputColor('Warm Color RGB Tuple : ')
+        # start = time.time()
+        TemperatureCircle(data, CANVAS_WIDTH, CANVAS_HEIGHT, coolColor, warmColor, saveLoop())
+        # print("Total Time : " , round((time.time()-start),4) , ' seconds')
+        print()
+        quit()
+    # start = time.time()
+    # TemperatureCircle(pd.read_csv('LEWAS_data\Cleaned_data\cleaned_temp.csv', usecols=['datetime','value']), canvas_width, canvas_height, (0,0,255), (255,120,0), None)
+    # TemperatureCircle(pd.read_csv('s.csv',usecols=['datetime','value']), canvas_width, canvas_height, (0,0,255), (255,120,0), None)
+    # print("Total Time : " , round((time.time()-start),4) , ' seconds')
 
     
             
@@ -153,11 +125,12 @@ def dataBars():
             print()
             colors[i] = (inputColor('Input Cool Color Tuple: '),
                          inputColor('Input Warm Color Tuple: '))
-        DataBars(canvas_width, canvas_height, numBars, 
+        DataBars(CANVAS_WIDTH, CANVAS_HEIGHT, numBars, 
                  datas[0], colors[0][0], colors[0][1],
                  datas[1], colors[1][0], colors[1][1],
                  datas[2], colors[2][0], colors[2][1],
                  saveLoop())
+        print()
         quit()
 
 def dot_graph():
@@ -169,22 +142,22 @@ def dot_graph():
         print('\nPlease Enter Warm Color')
         warmColor = inputColor('Warm Color RGB Tuple : ')
 
-        DotGraph(data1, data2, canvas_width, canvas_height, coolColor, warmColor, saveLoop())
+        LineGraph(data1, data2, CANVAS_WIDTH, CANVAS_HEIGHT, coolColor, warmColor, saveLoop())
+        print()
         quit()
 
 if __name__ == "__main__":
     if ( len(sys.argv) < 2 ):
         help()
-    elif (sys.argv[1] == "--help"):
-        help()
     elif (sys.argv[1] == "--TemperatureCircle"):
-        print("Welcome to Temperature Circle! To quit at any time, press \'q\'!")
+        print("\nWelcome to Temperature Circle! To quit at any time, press \'q\'!")
         temperature_circle()
-    elif (sys.argv[1] == "--DotGraph"):
-        print("Welcome to Dot Graph! To quit at any time, press \'q\'!")
+    elif (sys.argv[1] == "--LineGraph"):
+        print("\nWelcome to Line Graph! To quit at any time, press \'q\'!")
         dot_graph()
     elif (sys.argv[1] == "--DataBars"):
-        print("Welcome to Data Bars! To quit at any time, press \'q\'!")
+        print("\nWelcome to Data Bars! To quit at any time, press \'q\'!")
         dataBars()
-
-
+    else:
+        help()
+    

@@ -19,7 +19,7 @@ def write_csv(filein: str, fileout: str):
     # Uncomment to resample the values to average each hour
     df = df.resample('H')[['value']].mean()
     
-    df = df[ df['value'] < 1 ]
+    # df = df[ df['value'] < 1 ]
 
     df.to_csv(fileout)
 

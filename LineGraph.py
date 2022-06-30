@@ -5,7 +5,7 @@ import pandas as pd
 from PIL import Image, ImageDraw
 from ColorCalculator import ColorCalculator as cc
 
-class DotGraph:
+class LineGraph:
     def __init__(
         self,
         data: pd.DataFrame,
@@ -41,8 +41,8 @@ class DotGraph:
 
 
     def findDifferences(self, data: pd.DataFrame, data2: pd.DataFrame):
+        
         df = pd.merge(data, data2, how="outer", on="datetime")
-
         df["diff_x"] = df["value_x"].diff()
         df["diff_y"] = df["value_y"].diff()
         df = df.drop(columns=["value_x", "value_y"])
@@ -75,8 +75,7 @@ class DotGraph:
         self.prev = (row["pos_x"], row["pos_y"])
 
 
-
-    def lineColor(self, x, y):
+    def lineColor(self, x: int, y: int):
 
         try:
             slope = (y - self.prev[1]) / (x - self.prev[0])
