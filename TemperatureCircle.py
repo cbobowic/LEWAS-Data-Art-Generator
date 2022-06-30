@@ -1,24 +1,13 @@
+import ast
+from re import M
 import time
 from PIL import Image, ImageDraw
 import pandas as pd
 import math
+import numpy as np
+from ColorCalculator import ColorCalculator as cc
 
-
-class ColorCalculator:
-    def calculate_color(per: float, cool_color: tuple, warm_color: tuple) -> tuple:
-        """This method takes any two RGB tuples and plots a radial gradient from the cool
-        color (inside) to warm color (outside).
-
-        :param float per: the percent the color is between the cool and warm color (0-1)
-        :param tuple cool_color: the (R,G,B) for the color for the inside of the circle
-        :param tuple warm_color: the (R,G,B) for the color for the outside of the circle
-        :return tuple: the (R,G,B) tuple of the output color
-        """
-        inverse = 1 - per
-        r = int(cool_color[0] * inverse + warm_color[0] * per)
-        g = int(cool_color[1] * inverse + warm_color[1] * per)
-        b = int(cool_color[2] * inverse + warm_color[2] * per)
-        return (r, g, b)
+pd.options.mode.chained_assignment = None  # default='warn'
 
 
 class TemperatureCircle:
@@ -37,11 +26,6 @@ class TemperatureCircle:
         self.cool_color = cool_color
         self.warm_color = warm_color
         self.setup()
-
-        self.data.apply(
-            lambda row: self.plot_point(pd.to_datetime(row["datetime"]), row["value"]),
-            axis=1,
-        )
 
         self.img.show()
 
@@ -68,8 +52,51 @@ class TemperatureCircle:
 
         self.data = self.data[(self.data["value"] < 25)]  # Data cleaning
         # calculate minval and maxval of the DataFrame
-        self.min_val = self.data.min()["value"]
-        self.max_val = self.data.max()["value"]
+        min_val = self.data.min()["value"]
+        max_val = self.data.max()["value"]
+
+        df = self.data
+
+        df['datetime'] = pd.to_datetime(df["datetime"])
+
+        df['secondcount'] = df['datetime'].dt.second \
+                     + 60 * df['datetime'].dt.minute \
+                   + 3600 * df['datetime'].dt.hour \
+                 + 86400 * (df['datetime'].dt.day - 1) \
+               + 2678400 * (df['datetime'].dt.month - 1)
+        max_seconds = 3.154e7
+
+
+        # quit()
+
+        df['theta'] = df['secondcount'] / max_seconds * 2 * math.pi
+        # print(df.head())
+        # quit()
+       # calculating radius based off of value col
+        min_radius = 0
+        max_radius = self.height / 2
+
+        df['percent'] = (df['value'] - min_val) / (max_val - min_val)
+
+
+        df['radius'] = (max_radius - min_radius) * df['percent'] + min_radius
+        
+        origin = (self.width / 2, self.height * 2 / 5)
+
+        # print(df['percent'].head())
+        # quit()
+        df['pos_x'] = (origin[0] + df['radius'] * np.cos(df['theta'] - math.pi / 2)).astype('int')
+        df['pos_y'] = (origin[1] + df['radius'] * np.sin(df['theta'] - math.pi / 2)).astype('int')
+        # ColorCalculator.calculate_color(df, df['percent'], self.cool_color, self.warm_color)
+        df = df.drop(columns=['value','radius','theta','secondcount','datetime'])
+        print(df)
+
+        df.apply(lambda x: 
+        ImageDraw.Draw(self.img).ellipse((x[1]-1,x[2]-1, x[1]+1,x[2]+1),
+        fill=(cc.calculate_color(x[0], self.cool_color, self.warm_color))),
+        # print(x[0],x[1],x[2],x[3],x[4])
+        axis=1
+        )
 
     def plot_point(self, datetime: pd.Timestamp, value: float):
         """Calls calculate_point_vals to plot the pixel representing each data point.
@@ -89,6 +116,7 @@ class TemperatureCircle:
         ImageDraw.Draw(self.img).ellipse((xyrgb_tuple[0]-1, xyrgb_tuple[1]-1, \
                                           xyrgb_tuple[0]+1, xyrgb_tuple[1]+1), \
                                          fill=(xyrgb_tuple[2], xyrgb_tuple[3], xyrgb_tuple[4]))
+
 
     def calculate_point_vals(self, row_date: pd.Timestamp, row_val: float) -> tuple:
         """This method calculates the position and color values of a data point given
@@ -123,5 +151,6 @@ class TemperatureCircle:
         color = ColorCalculator.calculate_color(
             percentage, self.cool_color, self.warm_color
         )
+
 
         return position + color

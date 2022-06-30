@@ -3,8 +3,7 @@ import time
 from numpy import save
 import pandas as pd
 from PIL import Image, ImageDraw
-from TemperatureCircle import ColorCalculator as cc
-
+from ColorCalculator import ColorCalculator as cc
 
 class DotGraph:
     def __init__(
