@@ -50,10 +50,10 @@ class LineGraph:
         origin = (self.width / 2, self.height / 2)
 
         df["pos_x"] = origin[0] + (
-            df["diff_x"] / (df["diff_x"].max() - df["diff_x"].min()) * self.width
+            df["diff_x"] / (df["diff_x"].max() - df["diff_x"].min()) * (self.width - 500)
         )
         df["pos_y"] = origin[1] - (
-            df["diff_y"] / (df["diff_y"].max() - df["diff_y"].min()) * self.height
+            df["diff_y"] / (df["diff_y"].max() - df["diff_y"].min()) * (self.height - 500)
         )
 
         # Dropping cols and casting vals to ints

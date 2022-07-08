@@ -60,6 +60,8 @@ def inputFile(prompt: str):
         fileIn = input(prompt)
         if fileIn == 'q':
             quit()
+        elif fileIn.endswith('.csv\"') or fileIn.endswith('.csv\''):
+            fileIn = fileIn[1:-1]
         elif not fileIn.endswith('.csv'):
             print('ERROR: File must be of type *.csv!\n')
             continue
@@ -75,13 +77,15 @@ def saveLoop():
         saveIn = input('\nSave Image? [y/n] : ')
         if ( saveIn == 'q' ):
             quit()
-        if ( saveIn == 'y' or saveIn == 'Y' or saveIn == 'yes' or saveIn == 'Yes' ):
+        elif ( saveIn == 'y' or saveIn == 'Y' or saveIn == 'yes' or saveIn == 'Yes' ):
             filepath = input("Enter File Path : ")
-            if not ( filepath.endswith('.jpg') or filepath.endswith('.png') ):
+            if ( filepath.endswith('.jpg\'') or filepath.endswith('.jpg\"') or 
+                 filepath.endswith('.png\'') or filepath.endswith('.png\"') ):
+                filepath = filepath[1:-1]
+            elif not ( filepath.endswith('.jpg') or filepath.endswith('.png') ):
                 print("ERROR: File must be of type *.jpg or *.png!\n")
                 continue
-            else:
-                return filepath
+            return filepath
         elif ( saveIn == 'n' or saveIn == 'N' or saveIn == 'no' or saveIn == 'No' ):
             return None
         else:
