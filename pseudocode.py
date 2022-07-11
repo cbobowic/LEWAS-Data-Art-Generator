@@ -33,3 +33,28 @@
 # - Effect of different attributes (salinity, etc.) on wildlife
 # - Incorporate some way for the user to save their image
 # - Pitch some sort of social media something #share...
+
+# 
+# Posters: 
+#   -Website
+#       The reduction in points and the resulting improvement in performance
+#       Aesthetics Overhaul
+#       Design Changes with the graph (no checkboxes, default data)
+#       Code Overhaul
+#       Art gallery thing and new tab
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 
+# 

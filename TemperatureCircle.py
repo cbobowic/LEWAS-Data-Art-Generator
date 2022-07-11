@@ -42,8 +42,9 @@ class TemperatureCircle:
 
     def setup(self):
         """Sets up the image and centerpoint"""
-
-        self.img = Image.new(mode="RGB", size=(self.width, self.height), color="black")
+        # Chicago Maroon : (100,47,64)
+        # Burnt Orange : (194,74,43)
+        self.img = Image.new(mode="RGB", size=(self.width, self.height), color=(194,74,43))
         init_radius = 5
         ImageDraw.Draw(self.img).ellipse(
             xy=(
