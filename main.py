@@ -1,3 +1,4 @@
+import csv
 import re
 import sys
 import time
@@ -7,7 +8,9 @@ from PIL import Image, ImageDraw
 
 from DataBars import DataBars
 from LineGraph import LineGraph
+from SalinityCircle import SalinityCircle
 from TemperatureCircle import TemperatureCircle
+from CSVClean import CSVCleaner
 
 # Set the initial canvas dimensions
 CANVAS_WIDTH = 2000
@@ -38,6 +41,7 @@ def help():
     print('\nART GENERATOR USAGE:')
     print('--help               print this usage information')
     print('--TemperatureCircle  create a radial color circle')
+    print('--SalinityCircle     create a radial color circle very similar to TemperatureCircle with presets adjusted for salinity data')
     print('--LineGraph          create an graph of lines representing changes in data values')
     print('--DataBars           create 1, 2, or 3 bars representing data values\n')
 
@@ -69,6 +73,9 @@ def inputFile(prompt: str):
             data = pd.read_csv(fileIn, usecols=['value','datetime'])
         except FileNotFoundError:
             print("ERROR: File Not Found!\n")
+            continue
+        except ValueError:
+            print("ERROR: CSV Must contain a \'datetime\' and a \'value\' column.\n")
             continue
         return data
 
@@ -108,6 +115,18 @@ def temperature_circle():
     # TemperatureCircle(pd.read_csv('s.csv',usecols=['datetime','value']), canvas_width, canvas_height, (0,0,255), (255,120,0), None)
     # print("Total Time : " , round((time.time()-start),4) , ' seconds')
 
+def salinity_circle():
+    while True:
+        data = inputFile('\nPlease Enter CSV Filepath : ')
+        print('\nPlease Enter Cool Color')
+        coolColor = inputColor('Cool Color RGB Tuple : ')
+        print('\nPlease Enter Warm Color')
+        warmColor = inputColor('Warm Color RGB Tuple : ')
+        # start = time.time()
+        SalinityCircle(data, CANVAS_WIDTH, CANVAS_HEIGHT, coolColor, warmColor, saveLoop())
+        # print("Total Time : " , round((time.time()-start),4) , ' seconds')
+        print()
+        quit()
     
             
 def dataBars():
@@ -137,31 +156,91 @@ def dataBars():
         print()
         quit()
 
-def dot_graph():
-    while True:
-        data1 = inputFile('\nPlease Enter CSV Filepath 1 : ')
-        data2 = inputFile('\nPlease Enter CSV Filepath 2 : ')
-        print('\nPlease Enter Cool Color')
-        coolColor = inputColor('Cool Color RGB Tuple : ')
-        print('\nPlease Enter Warm Color')
-        warmColor = inputColor('Warm Color RGB Tuple : ')
+def line_graph():
+    data1 = inputFile('\nPlease Enter CSV Filepath 1 : ')
+    data2 = inputFile('\nPlease Enter CSV Filepath 2 : ')
+    print('\nPlease Enter Cool Color')
+    coolColor = inputColor('Cool Color RGB Tuple : ')
+    print('\nPlease Enter Warm Color')
+    warmColor = inputColor('Warm Color RGB Tuple : ')
 
-        LineGraph(data1, data2, CANVAS_WIDTH, CANVAS_HEIGHT, coolColor, warmColor, saveLoop())
-        print()
-        quit()
+    LineGraph(data1, data2, CANVAS_WIDTH, CANVAS_HEIGHT, coolColor, warmColor, saveLoop())
+    print()
+
+def outputFile(prompt: str):
+    while True:
+        fileOut = input(prompt)
+        if fileOut == 'q':
+            quit()
+        elif fileOut.endswith('.csv\"') or fileOut.endswith('.csv\''):
+            fileOut = fileOut[1:-1]
+        elif not fileOut.endswith('.csv'):
+            print('ERROR: File must be of type *.csv!\n')
+            continue
+        return fileOut
+
+
+
+def csv_cleaner():
+    while True: # Input REPL
+        fileIn = input('\nPlease Enter Input CSV Filepath: ')
+        if fileIn == 'q':
+            quit()
+        elif fileIn.endswith('.csv\"') or fileIn.endswith('.csv\''):
+            fileIn = fileIn[1:-1]
+        elif not fileIn.endswith('.csv'):
+            print('ERROR: File must be of type *.csv!\n')
+            continue
+        try:
+            data = pd.read_csv(fileIn, usecols=['value','datetime'])
+            break
+        except FileNotFoundError:
+            print("ERROR: File Not Found!\n")
+            continue
+        except ValueError:
+            print("ERROR: CSV Must contain a \'datetime\' and a \'value\' column.\n")
+            continue
+
+    fileOut = outputFile('\nPlease Enter Output CSV Filepath: ') # Output REPL
+
+    while True: # Resample REPL
+        r = input('\nResample to Hourly Averages? [y/n] : ')
+        if ( r == 'q' ):
+            quit()
+        elif ( r == 'y' or r == 'Y' or r == 'yes' or r == 'Yes' ):
+            resample = True
+            print('Resampling to Hourly Averages!')
+            break
+        elif ( r == 'n' or r == 'N' or r == 'no' or r == 'No' ):
+            resample = False
+            print('Not Resampling!')
+            break
+        else:
+            print("ERROR: Please enter yes (y) or no (n)")
+
+    print('\nCSV Cleaned!')        
+    CSVCleaner(data, fileOut, resample)
+    
+
 
 if __name__ == "__main__":
     if ( len(sys.argv) < 2 ):
         help()
-    elif (sys.argv[1] == "--TemperatureCircle"):
+    elif ( sys.argv[1] == "--TemperatureCircle" ):
         print("\nWelcome to Temperature Circle! To quit at any time, press \'q\'!")
         temperature_circle()
-    elif (sys.argv[1] == "--LineGraph"):
+    elif ( sys.argv[1] == "--SalinityCircle" ):
+        print("\nWelcome Salinity Circle! To quit at any time, press \'q\'!")
+        salinity_circle()
+    elif ( sys.argv[1] == "--LineGraph" ):
         print("\nWelcome to Line Graph! To quit at any time, press \'q\'!")
-        dot_graph()
-    elif (sys.argv[1] == "--DataBars"):
+        line_graph()
+    elif ( sys.argv[1] == "--DataBars" ):
         print("\nWelcome to Data Bars! To quit at any time, press \'q\'!")
         dataBars()
+    elif ( sys.argv[1] == "--CSVCleaner" ):
+        print("\nWelcome to the CSV Cleaner! To quit at any time, press \'q\'!")
+        csv_cleaner()
     else:
         help()
     

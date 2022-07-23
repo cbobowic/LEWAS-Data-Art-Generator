@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageChops
 import pandas as pd
 import math
 import numpy as np
@@ -7,7 +7,7 @@ from ColorCalculator import ColorCalculator as cc
 pd.options.mode.chained_assignment = None  # default='warn'
 
 
-class TemperatureCircle:
+class SalinityCircle:
     def __init__(
         self,
         data: pd.DataFrame,
@@ -27,11 +27,11 @@ class TemperatureCircle:
         df = self.calculate_values(data)
         df.apply(lambda row: 
         ImageDraw.Draw(self.img).ellipse((row['pos_x']-1,row['pos_y']-1, 
-                                          row['pos_x']+1,row['pos_y']+1),
+                                          row['pos_x']+2,row['pos_y']+2),
         fill=(cc.calculate_color(row['percent'], self.cool_color, self.warm_color))),
         axis=1
         )
-
+        # self.img = ImageChops.invert(self.img)
         self.img.show()
 
         if ( savePath != None ):
@@ -43,20 +43,10 @@ class TemperatureCircle:
     def setup(self):
         """Sets up the image and centerpoint"""
         # Chicago Maroon : (100,47,64)
+        # Official Maroon : (134,31,65)
         # Burnt Orange : (194,74,43)
-        # self.img = Image.new(mode="RGB", size=(self.width, self.height), color=(0,0,0))
-        self.img = Image.open(r'C:\LEWAS\michelle-colden-art-generator\GeneratedArt\black_on_orange.jpg')
-        
-        init_radius = 7
-        ImageDraw.Draw(self.img).ellipse(
-            xy=(
-                self.width / 2 - init_radius,
-                self.height /2 - init_radius,
-                self.width / 2 + init_radius,
-                self.height /2 + init_radius,
-            ),
-            fill="white",
-        )
+        # Official Orange : (232,119,34)
+        self.img = Image.new(mode="RGB", size=(self.width, self.height), color=(0,0,0))
 
     def calculate_values(self, df: pd.DataFrame):
         df = df[(df["value"] < 25)]  # Data cleaning
@@ -74,8 +64,8 @@ class TemperatureCircle:
         df['theta'] = df['secondcount'] / max_seconds * 2 * math.pi
 
         min_radius = 0
-        max_radius = self.height / 2
-        origin = (self.width / 2, self.height /2)
+        max_radius = self.height / 2.5
+        origin = (self.width / 2, self.height / 2)
 
         df['percent'] = (df['value'] - min_val) / (max_val - min_val)
         df['radius'] = (max_radius - min_radius) * df['percent'] + min_radius
