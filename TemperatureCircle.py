@@ -47,15 +47,15 @@ class TemperatureCircle:
         # self.img = Image.new(mode="RGB", size=(self.width, self.height), color=(0,0,0))
         self.img = Image.open(r'C:\LEWAS\michelle-colden-art-generator\GeneratedArt\black_on_orange.jpg')
         
-        init_radius = 7
+        init_radius = 10
         ImageDraw.Draw(self.img).ellipse(
             xy=(
-                self.width / 2 - init_radius,
+                self.width /2 - init_radius,
                 self.height /2 - init_radius,
                 self.width / 2 + init_radius,
                 self.height /2 + init_radius,
             ),
-            fill="white",
+            fill="yellow",
         )
 
     def calculate_values(self, df: pd.DataFrame):
