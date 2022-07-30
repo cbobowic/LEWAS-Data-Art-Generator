@@ -1,0 +1,19 @@
+Welcome to the LEWAS Lab Data Art Generator! 
+
+This project was created by the LEWAS Lab as part of the Virginia Tech 2022 
+Solving Problems with Data Science, funded by the National Science Foundation 
+(NSF) Grant # 1922516. The project was created with the intent of making the 
+extensive LEWAS database more accessable to the general public. 
+
+To use the LEWAS Lab Data Art Generator, users can download the LEWAS data of
+their choice at http://owls.lewas.ictas.vt.edu/single_graph.html. Then, users
+can run the file CSVCleaner to resample and clean the LEWAS data. Depending on
+the extent of the data, this process may take a few minutes. After this, users
+can run the main file. Use the option "--help" to see more information and 
+options. 
+
+Requirements:
+The LEWAS Lab Data Art Generator requires the following software to run properly:
+~ Python 3.10.5
+~ Pandas 1.4.2
+~ Pillow 9.1.1

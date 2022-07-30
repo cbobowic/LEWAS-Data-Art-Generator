@@ -42,20 +42,17 @@ class TemperatureCircle:
 
     def setup(self):
         """Sets up the image and centerpoint"""
-        # Chicago Maroon : (100,47,64)
-        # Burnt Orange : (194,74,43)
-        # self.img = Image.new(mode="RGB", size=(self.width, self.height), color=(0,0,0))
-        self.img = Image.open(r'C:\LEWAS\michelle-colden-art-generator\GeneratedArt\black_on_orange.jpg')
+        self.img = Image.new(mode="RGB", size=(self.width, self.height), color="black")
         
-        init_radius = 10
+        init_radius = 5
         ImageDraw.Draw(self.img).ellipse(
             xy=(
                 self.width /2 - init_radius,
-                self.height /2 - init_radius,
+                self.height * 2/5 - init_radius,
                 self.width / 2 + init_radius,
-                self.height /2 + init_radius,
+                self.height * 2/5 + init_radius,
             ),
-            fill="yellow",
+            fill="white",
         )
 
     def calculate_values(self, df: pd.DataFrame):
@@ -75,7 +72,7 @@ class TemperatureCircle:
 
         min_radius = 0
         max_radius = self.height / 2
-        origin = (self.width / 2, self.height /2)
+        origin = (self.width / 2, self.height * 2/5)
 
         df['percent'] = (df['value'] - min_val) / (max_val - min_val)
         df['radius'] = (max_radius - min_radius) * df['percent'] + min_radius

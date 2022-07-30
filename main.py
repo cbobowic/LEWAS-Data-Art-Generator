@@ -1,41 +1,17 @@
-import csv
 import re
 import sys
-import time
 import pandas as pd
-import random as rnd
-from PIL import Image, ImageDraw
 
 from DataBars import DataBars
 from LineGraph import LineGraph
 from SalinityCircle import SalinityCircle
 from TemperatureCircle import TemperatureCircle
-from CSVClean import CSVCleaner
+from Resampler import Resampler
 
 # Set the initial canvas dimensions
 CANVAS_WIDTH = 2000
 CANVAS_HEIGHT = 1500
 RGB_REGEX = "^\((([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])),(([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5])),(([01]?[0-9]?[0-9]|2[0-4][0-9]|25[0-5]))\)$"
-
-
-def drawPoints():
-    img = Image.new(mode='RGB', size=(CANVAS_WIDTH, CANVAS_HEIGHT), color='black')
-    draw = ImageDraw.Draw(img)
-    w, h = img.size
-    # DISTANCE AMONG POINTS
-    step = 10
-    for n in range(step, w, step):
-        for x in range(step, h - step, step):
-            ran = rnd.uniform(0.0, 40.0)
-            a = n + ran
-            b = x + ran
-            if a > CANVAS_WIDTH:
-                a = n
-            if b > CANVAS_HEIGHT:
-                b = x
-            draw.point((a, b), fill="yellow")
-    img.show()
-
 
 def help():
     print('\nART GENERATOR USAGE:')
@@ -79,6 +55,18 @@ def inputFile(prompt: str):
             continue
         return data
 
+def outputFile(prompt: str):
+    while True:
+        fileOut = input(prompt)
+        if fileOut == 'q':
+            quit()
+        elif fileOut.endswith('.csv\"') or fileOut.endswith('.csv\''):
+            fileOut = fileOut[1:-1]
+        elif not fileOut.endswith('.csv'):
+            print('ERROR: File must be of type *.csv!\n')
+            continue
+        return fileOut
+
 def saveLoop():
     while True:
         saveIn = input('\nSave Image? [y/n] : ')
@@ -105,15 +93,9 @@ def temperature_circle():
         coolColor = inputColor('Cool Color RGB Tuple : ')
         print('\nPlease Enter Warm Color')
         warmColor = inputColor('Warm Color RGB Tuple : ')
-        # start = time.time()
         TemperatureCircle(data, CANVAS_WIDTH, CANVAS_HEIGHT, coolColor, warmColor, saveLoop())
-        # print("Total Time : " , round((time.time()-start),4) , ' seconds')
         print()
         quit()
-    # start = time.time()
-    # TemperatureCircle(pd.read_csv('LEWAS_data\Cleaned_data\cleaned_temp.csv', usecols=['datetime','value']), canvas_width, canvas_height, (0,0,255), (255,120,0), None)
-    # TemperatureCircle(pd.read_csv('s.csv',usecols=['datetime','value']), canvas_width, canvas_height, (0,0,255), (255,120,0), None)
-    # print("Total Time : " , round((time.time()-start),4) , ' seconds')
 
 def salinity_circle():
     while True:
@@ -122,13 +104,10 @@ def salinity_circle():
         coolColor = inputColor('Cool Color RGB Tuple : ')
         print('\nPlease Enter Warm Color')
         warmColor = inputColor('Warm Color RGB Tuple : ')
-        # start = time.time()
         SalinityCircle(data, CANVAS_WIDTH, CANVAS_HEIGHT, coolColor, warmColor, saveLoop())
-        # print("Total Time : " , round((time.time()-start),4) , ' seconds')
         print()
         quit()
-    
-            
+      
 def dataBars():
     while True:
         numBars = input('\nPlease enter a number of data bars to display [1-3] : ')
@@ -166,20 +145,6 @@ def line_graph():
 
     LineGraph(data1, data2, CANVAS_WIDTH, CANVAS_HEIGHT, coolColor, warmColor, saveLoop())
     print()
-
-def outputFile(prompt: str):
-    while True:
-        fileOut = input(prompt)
-        if fileOut == 'q':
-            quit()
-        elif fileOut.endswith('.csv\"') or fileOut.endswith('.csv\''):
-            fileOut = fileOut[1:-1]
-        elif not fileOut.endswith('.csv'):
-            print('ERROR: File must be of type *.csv!\n')
-            continue
-        return fileOut
-
-
 
 def csv_cleaner():
     while True: # Input REPL
@@ -219,9 +184,8 @@ def csv_cleaner():
             print("ERROR: Please enter yes (y) or no (n)")
 
     print('\nCSV Cleaned!')        
-    CSVCleaner(data, fileOut, resample)
+    Resampler(data, fileOut, resample)
     
-
 
 if __name__ == "__main__":
     if ( len(sys.argv) < 2 ):

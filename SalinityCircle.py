@@ -1,4 +1,4 @@
-from PIL import Image, ImageDraw, ImageChops
+from PIL import Image, ImageDraw
 import pandas as pd
 import math
 import numpy as np
@@ -64,7 +64,7 @@ class SalinityCircle:
         df['theta'] = df['secondcount'] / max_seconds * 2 * math.pi
 
         min_radius = 0
-        max_radius = self.height / 2.5
+        max_radius = self.height / 2
         origin = (self.width / 2, self.height / 2)
 
         df['percent'] = (df['value'] - min_val) / (max_val - min_val)

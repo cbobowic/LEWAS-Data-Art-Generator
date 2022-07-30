@@ -1,6 +1,4 @@
 import math
-import time
-from numpy import save
 import pandas as pd
 from PIL import Image, ImageDraw
 from ColorCalculator import ColorCalculator as cc
@@ -25,11 +23,7 @@ class LineGraph:
         self.img = Image.new(mode="RGB", size=(self.width, self.height), color="black")
         df = self.findDifferences(data, data2)
 
-        # print("Starting apply")
-        # start = time.time()
         df.apply(lambda x: self.plot_point(x), axis=1)
-        # end = time.time()
-        # print("Time to apply : ", (end - start))
 
         self.img.show()
 

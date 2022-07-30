@@ -1,6 +1,6 @@
 import pandas as pd
 
-class CSVCleaner:
+class Resampler:
 
     def __init__(self, data: pd.DataFrame, fileout: str, resample: bool):
         self.df = data
