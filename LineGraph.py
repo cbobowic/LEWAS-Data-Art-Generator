@@ -1,6 +1,7 @@
 import math
 import pandas as pd
 from PIL import Image, ImageDraw
+
 from ColorCalculator import ColorCalculator as cc
 
 class LineGraph:

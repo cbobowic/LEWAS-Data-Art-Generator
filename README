@@ -17,3 +17,4 @@ The LEWAS Lab Data Art Generator requires the following software to run properly
 ~ Python 3.10.5
 ~ Pandas 1.4.2
 ~ Pillow 9.1.1
+~ NumPy 1.22.4
